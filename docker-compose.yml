@@ -1,0 +1,33 @@
+services:
+  db:
+    container_name: elia-db
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    container_name: elia-api
+    image: eliaregistry.azurecr.io/elia-api:latest  # Pull backend image from ACR
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV_STATE=${ENV_STATE}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT} 
+      - DB_SSL=${DB_SSL} 
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      db:
+        condition: service_started
+
+volumes:
+  postgres_data:
