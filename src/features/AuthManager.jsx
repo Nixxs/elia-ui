@@ -45,8 +45,9 @@ const AuthContext = createContext();
 
 const login = async (dispatch, email, password) => {
     dispatch({ type: "LOGIN_REQUEST" });
+    console.log(`${import.meta.env.VITE_API_URL}/login`);
     try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/accounts/user/login`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
