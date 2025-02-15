@@ -66,6 +66,7 @@ const login = async (dispatch, email, password) => {
             return({"status":response.status, "message":data.message});
         }
     } catch (error) {
+        alert("error");
         dispatch({ type: "LOGIN_FAILURE", payload: `something went wrong: ${error}` });
     }
 }
