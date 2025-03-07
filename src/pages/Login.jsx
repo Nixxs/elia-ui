@@ -10,15 +10,18 @@ import Divider from "@mui/material/Divider";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { getRandomImage } from "../utils/image";
+import { LoadingOverlay } from "../features/Loader";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const { authState, dispatch } = useAuth();
   const navigate = useNavigate();
   const [background, setBackground] = useState(() => getRandomImage());
 
   const handleSubmit = useCallback(async () => {
+    setLoading(true);
     const result = await login(dispatch, email, password);
     if (result) {
       if (result.message === "success") {
@@ -27,6 +30,7 @@ function Login() {
         toast.error(result.message);
       }
     }
+    setLoading(false);
   }, [dispatch, email, password, navigate]);
 
   const debouncedHandleSubmit = useRef(_.debounce(handleSubmit, 300));
@@ -156,6 +160,7 @@ function Login() {
           Image by Unsplash
         </Typography>
       </Box>
+      <LoadingOverlay isOpen={loading} />
     </Box>
   );
 }

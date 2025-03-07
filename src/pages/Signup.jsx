@@ -10,12 +10,14 @@ import { toast } from "react-toastify";
 import _ from "lodash";
 import { getRandomImage } from "../utils/image";
 import axios from "axios";
+import { LoadingOverlay } from "../features/Loader";
 
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [background, setBackground] = useState(() => getRandomImage());
 
@@ -27,6 +29,7 @@ function Signup() {
 
   const handleSubmit = useCallback(async () => {
     setErrorMessage(null);
+    setLoading(true);
     // Handle Validation Here
 
     if (!email || !password || !confirmPassword) {
@@ -78,6 +81,8 @@ function Signup() {
         } else {
             handleError(error.response.data.detail);
         }
+    } finally {
+        setLoading(false);
     }
   });
 
@@ -220,6 +225,7 @@ function Signup() {
           Image by Unsplash
         </Typography>
       </Box>
+      <LoadingOverlay isOpen={loading} />
     </Box>
   );
 }
