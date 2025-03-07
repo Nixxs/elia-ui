@@ -37,6 +37,7 @@ This the the front-end of the ELIA application, build on react and javascript. T
     DB_USER=postgres
     DB_PASSWORD=pa55word
     FRONTEND_URL=http://127.0.0.1:8080
+    JWT_SECRET=1234secret1234
     ```
 - using your azure cli tools login so you can access the container registry
     - `az acr login --name eliaregistry`

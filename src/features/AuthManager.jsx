@@ -3,9 +3,8 @@ import { createContext, useReducer, useContext } from "react";
 // Define initial authentication state
 const initialState = {
     isAuthenticated: false,
-    user: null,
     token: null,
-    expiry: null
+    error: null,
 };
 
 // Define reducer function
@@ -17,9 +16,7 @@ export const authReducer = (state, action) => {
             return {
                 ...state,
                 isAuthenticated: true,
-                user: action.payload.user,
                 token: action.payload.access_token,
-                expiry: action.payload.expiry
             };
         case "LOGIN_FAILURE":
             return {
@@ -30,9 +27,7 @@ export const authReducer = (state, action) => {
             return {
                 ...state,
                 isAuthenticated: false,
-                user: null,
                 token: null,
-                expiry: null,
                 error: null,
             };
         default:
@@ -45,9 +40,9 @@ const AuthContext = createContext();
 
 const login = async (dispatch, email, password) => {
     dispatch({ type: "LOGIN_REQUEST" });
-    console.log(`${import.meta.env.VITE_API_URL}/login`);
+    console.log(`${import.meta.env.VITE_API_URL}/token`);
     try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/token`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -64,10 +59,9 @@ const login = async (dispatch, email, password) => {
             return({"status":response.status, "message":"success"});
         } else {
             dispatch({ type: "LOGIN_FAILURE", payload: data });
-            return({"status":response.status, "message":data.message});
+            return({"status":response.status, "message":data.detail});
         }
     } catch (error) {
-        alert("error");
         dispatch({ type: "LOGIN_FAILURE", payload: `something went wrong: ${error}` });
     }
 }
