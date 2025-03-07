@@ -3,8 +3,6 @@ import { useAuth, login } from "../features/AuthManager";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -16,13 +14,12 @@ import { getRandomImage } from "../utils/image";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
   const { authState, dispatch } = useAuth();
   const navigate = useNavigate();
   const [background, setBackground] = useState(() => getRandomImage());
 
   const handleSubmit = useCallback(async () => {
-    const result = await login(dispatch, email, password, remember);
+    const result = await login(dispatch, email, password);
     if (result) {
       if (result.message === "success") {
         navigate("/");
@@ -30,7 +27,7 @@ function Login() {
         toast.error(result.message);
       }
     }
-  }, [dispatch, email, password, remember, navigate]);
+  }, [dispatch, email, password, navigate]);
 
   const debouncedHandleSubmit = useRef(_.debounce(handleSubmit, 300));
 
@@ -156,7 +153,7 @@ function Login() {
             fontWeight: 400,
           }}
         >
-          Image by Usplash
+          Image by Unsplash
         </Typography>
       </Box>
     </Box>

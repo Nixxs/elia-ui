@@ -21,7 +21,7 @@ export const authReducer = (state, action) => {
         case "LOGIN_FAILURE":
             return {
                 ...state,
-                error: action.payload.message,
+                error: action.payload.detail,
             };
         case "LOGOUT":
             return {
@@ -40,7 +40,6 @@ const AuthContext = createContext();
 
 const login = async (dispatch, email, password) => {
     dispatch({ type: "LOGIN_REQUEST" });
-    console.log(`${import.meta.env.VITE_API_URL}/token`);
     try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/token`, {
             method: "POST",
