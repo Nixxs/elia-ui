@@ -26,6 +26,10 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - FRONTEND_URL=${FRONTEND_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - CHAT_HISTORY_LIMIT=${CHAT_HISTORY_LIMIT}
+      - GOOGLE_LLM_MODEL=${GOOGLE_LLM_MODEL}
     depends_on:
       db:
         condition: service_started
