@@ -5,8 +5,9 @@ import ChatInput from "./ChatInput";
 import axios from "axios";
 import { useAuth } from "../features/AuthManager"
 import { toast } from "react-toastify";
+import { addMarker } from "../functions/MapControl"
 
-const ChatWindow = () => {
+const ChatWindow = ({map}) => {
     const [messages, setMessages] = useState([]);
 	const [loading, setLoading] = useState(false);
     const [input, setInput] = useState("");
@@ -20,8 +21,16 @@ const ChatWindow = () => {
 		if (data.response_type == "chat") {
 			setMessages((prevMessages) => [...prevMessages, { sender: "elia", text: data.message }]);
 		} else if (data.response_type == "function_call") {
-			// Placeholder for function call
-			setMessages((prevMessages) => [...prevMessages, { sender: "elia", text: "Function call: " + data.name }]);
+            switch (data.name) {
+                case "add_marker":
+                    const { latitude, longitude, label } = data.arguments;
+                    addMarker(map, latitude, longitude, label); // Call your add_marker function
+                    setMessages((prevMessages) => [...prevMessages, { sender: "elia", text: data.message }]);
+                    break;
+                default:
+                    console.warn(`Unknown function call: ${data.name}`, data.arguments);
+                    break;
+            }
 		}
 	};
 
@@ -56,7 +65,9 @@ const ChatWindow = () => {
 			} else if (error.request) {
 				handleError("No response received from the server. Please try again.");
 			} else {
-				handleError(error.response.data.detail);
+				console.log(error);
+                handleError(error);
+
 			}
 		} finally {
 			setLoading(false); // End loading
