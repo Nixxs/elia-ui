@@ -1,20 +1,21 @@
 import { useAuth } from "../features/AuthManager";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import ChatWindow from "../components/ChatWindow";
+import MapView from "../components/MapView";
 import { Typography } from "@mui/material";
 
 function Main() {
     const { authState } = useAuth();
     const navigate = useNavigate();
-    
+    const [map, setMap] = useState(null); // ✅ Map instance state
+
     // Check if the user is authenticated, send them to login screen if not
     useEffect(() => {
         if (!authState.isAuthenticated) {
             navigate("/login");
         }
-        console.log(authState);
     }, [authState, navigate]);
 
     return (
@@ -41,25 +42,17 @@ function Main() {
                     flex: 1,
                     display: "flex",
                     flexDirection: "row",
-                    minHeight: 0, // ✅ IMPORTANT to prevent overflow
+                    minHeight: 0, // Prevent overflow
                 }}
             >
                 {/* Left Side - Chat Window */}
-                <Box sx={{ flex: 1, overflow: "hidden" }}>
-                    <ChatWindow />
+                <Box sx={{ flex: 2, overflow: "hidden" }}>
+                    <ChatWindow map={map} /> {/* ✅ Pass map instance */}
                 </Box>
 
                 {/* Right Side - Google Map */}
-                <Box sx={{ flex: 1, borderRight: "1px solid #ddd", overflow: "hidden" }}>
-                    <h2>Map View</h2>
-                    <div
-                        id="map"
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            display: "flex",
-                        }}
-                    ></div>
+                <Box sx={{ flex: 3, borderRight: "1px solid #ddd", overflow: "hidden" }}>
+                    <MapView onMapLoad={setMap} /> {/* ✅ Capture map instance on load */}
                 </Box>
             </Box>
         </Box>
