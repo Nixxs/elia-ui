@@ -38,6 +38,9 @@ This the the front-end of the ELIA application, build on react and javascript. T
     DB_PASSWORD=pa55word
     FRONTEND_URL=http://127.0.0.1:8080
     JWT_SECRET=1234secret1234
+    GOOGLE_API_KEY=yourgoogleapikeyforgemini
+    CHAT_HISTORY_LIMIT=100
+    GOOGLE_LLM_MODEL=gemini-1.5-pro-latest
     ```
 - using your azure cli tools login so you can access the container registry
     - `az acr login --name eliaregistry`
