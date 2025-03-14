@@ -1,39 +1,44 @@
-const updateMapData = async (map, geojson) => {
-	if (!map || !map.dataLayer) {
-		console.error("Map or Data Layer not initialized.");
-		return null;
-	}
+const processFeatureBounds = (feature, bounds) => {
+    feature.getGeometry().forEachLatLng((latLng) => {
+        bounds.extend(latLng);
+    });
+};
 
-	// Clear existing data if needed
+const updateMapData = async (map, geojson) => {
+    if (!map || !map.dataLayer) {
+        console.error("Map or Data Layer not initialized.");
+        return null;
+    }
+
+    // Clear existing data
     map.dataLayer.forEach((feature) => {
         map.dataLayer.remove(feature);
     });
 
-    console.log(geojson);
+    console.log("Incoming GeoJSON:", geojson);
 
-	// Add the incoming GeoJSON data to the map's data layer
-	map.dataLayer.addGeoJson(geojson);
+    // Add GeoJSON to data layer
+    map.dataLayer.addGeoJson(geojson);
 
-	// Optional: Zoom or pan to the new data, depending on geometry type
-	const bounds = new google.maps.LatLngBounds();
-	geojson.features.forEach((feature) => {
-		const coords = feature.geometry.coordinates;
-		switch (feature.geometry.type) {
-			case "Point":
-				bounds.extend({ lat: coords[1], lng: coords[0] });
-				break;
-			case "LineString":
-			case "Polygon":
-				coords.flat(Infinity).forEach(([lng, lat]) => bounds.extend({ lat, lng }));
-				break;
-			// Add more geometry handling as needed
-		}
-	});
-	map.fitBounds(bounds);
+    // Create bounds object
+    const bounds = new google.maps.LatLngBounds();
 
-	console.log("GeoJSON data updated on map:", geojson);
-	return geojson;
+    // Extend bounds to include all features in data layer
+    map.dataLayer.forEach((feature) => {
+        processFeatureBounds(feature, bounds);
+    });
+
+    // Fit map to bounds if not empty
+    if (!bounds.isEmpty()) {
+        map.fitBounds(bounds);
+    } else {
+        console.warn("No valid geometry to fit bounds.");
+    }
+
+    console.log("GeoJSON data updated on map:", geojson);
+    return geojson;
 };
+
 
 const getGeoJsonFromDataLayer = async (map) => {
 	if (!map || !map.dataLayer) {
