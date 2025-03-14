@@ -5,7 +5,7 @@ import ChatInput from "./ChatInput";
 import axios from "axios";
 import { useAuth } from "../features/AuthManager";
 import { toast } from "react-toastify";
-import { addPointToGeojsonLayer, getGeoJsonFromDataLayer } from "../functions/MapControl";
+import { updateMapData, getGeoJsonFromDataLayer } from "../functions/MapControl";
 
 const ChatWindow = ({ map }) => {
 	const [messages, setMessages] = useState([]);
@@ -25,20 +25,18 @@ const ChatWindow = ({ map }) => {
 			]);
 		} else if (data.response_type == "function_call") {
 			switch (data.name) {
-				case "add_marker":
-					const { latitude, longitude, label } = data.arguments;
-					await addPointToGeojsonLayer(map, latitude, longitude, label); // Call your add_marker function
-					setMessages((prevMessages) => [
-						...prevMessages,
-						{ sender: "elia", text: data.message },
-					]);
-					break;
-				default:
-					console.warn(
-						`Unknown function call: ${data.name}`,
-						data.arguments
-					);
-					break;
+                case "update_map_data":
+                    const geojsonStr = data.arguments.geojson;
+                    const geojson = JSON.parse(geojsonStr);
+                    await updateMapData(map, geojson); // New generic map update function
+                    setMessages((prevMessages) => [
+                        ...prevMessages,
+                        { sender: "elia", text: data.message },
+                    ]);
+                    break;
+                default:
+                    console.warn(`Unknown function call: ${data.name}`, data.arguments);
+                    break;
 			}
 		}
 	};

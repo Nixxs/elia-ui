@@ -1,32 +1,38 @@
-const addPointToGeojsonLayer = async (map, lat, lng, label = "") => {
+const updateMapData = async (map, geojson) => {
 	if (!map || !map.dataLayer) {
 		console.error("Map or Data Layer not initialized.");
 		return null;
 	}
 
-	// Create a GeoJSON Feature for the point
-	const pointFeature = {
-		type: "Feature",
-		geometry: {
-			type: "Point",
-			coordinates: [lng, lat],
-		},
-		properties: {
-			label: label,
-		},
-	};
+	// Clear existing data if needed
+    map.dataLayer.forEach((feature) => {
+        map.dataLayer.remove(feature);
+    });
 
-	// Add point to existing data layer
-	map.dataLayer.addGeoJson({
-		type: "FeatureCollection",
-		features: [pointFeature],
+    console.log(geojson);
+
+	// Add the incoming GeoJSON data to the map's data layer
+	map.dataLayer.addGeoJson(geojson);
+
+	// Optional: Zoom or pan to the new data, depending on geometry type
+	const bounds = new google.maps.LatLngBounds();
+	geojson.features.forEach((feature) => {
+		const coords = feature.geometry.coordinates;
+		switch (feature.geometry.type) {
+			case "Point":
+				bounds.extend({ lat: coords[1], lng: coords[0] });
+				break;
+			case "LineString":
+			case "Polygon":
+				coords.flat(Infinity).forEach(([lng, lat]) => bounds.extend({ lat, lng }));
+				break;
+			// Add more geometry handling as needed
+		}
 	});
+	map.fitBounds(bounds);
 
-	// Optionally pan to point
-	map.panTo({ lat, lng });
-
-	console.log("Point added to GeoJSON layer:", pointFeature);
-	return pointFeature;
+	console.log("GeoJSON data updated on map:", geojson);
+	return geojson;
 };
 
 const getGeoJsonFromDataLayer = async (map) => {
@@ -58,4 +64,4 @@ const getGeoJsonFromDataLayer = async (map) => {
 	return featureCollection ? JSON.stringify(featureCollection) : "";
 };
 
-export { addPointToGeojsonLayer, getGeoJsonFromDataLayer };
+export { updateMapData, getGeoJsonFromDataLayer };
