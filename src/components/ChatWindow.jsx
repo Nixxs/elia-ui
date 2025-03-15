@@ -27,7 +27,8 @@ const ChatWindow = ({ map }) => {
 			switch (data.name) {
                 case "update_map_data":
                     const geojson = data.arguments.geojson;
-                    await updateMapData(map, geojson); // New generic map update function
+                    const updateType = data.arguments.type;
+                    await updateMapData(map, geojson, updateType); // New generic map update function
                     setMessages((prevMessages) => [
                         ...prevMessages,
                         { sender: "elia", text: data.message },
