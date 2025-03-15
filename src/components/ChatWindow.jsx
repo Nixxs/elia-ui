@@ -26,8 +26,7 @@ const ChatWindow = ({ map }) => {
 		} else if (data.response_type == "function_call") {
 			switch (data.name) {
                 case "update_map_data":
-                    const geojsonStr = data.arguments.geojson;
-                    const geojson = JSON.parse(geojsonStr);
+                    const geojson = data.arguments.geojson;
                     await updateMapData(map, geojson); // New generic map update function
                     setMessages((prevMessages) => [
                         ...prevMessages,
