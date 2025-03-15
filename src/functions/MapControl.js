@@ -4,16 +4,18 @@ const processFeatureBounds = (feature, bounds) => {
     });
 };
 
-const updateMapData = async (map, geojson) => {
+const updateMapData = async (map, geojson, updateType) => {
     if (!map || !map.dataLayer) {
         console.error("Map or Data Layer not initialized.");
         return null;
     }
 
-    // Clear existing data
-    map.dataLayer.forEach((feature) => {
-        map.dataLayer.remove(feature);
-    });
+    // Clear existing data if the update type from the llm is replace
+    if (updateType == "replace"){
+        map.dataLayer.forEach((feature) => {
+            map.dataLayer.remove(feature);
+        });
+    }
 
     console.log("Incoming GeoJSON:", geojson);
 
