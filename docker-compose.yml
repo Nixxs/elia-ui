@@ -13,8 +13,7 @@ services:
 
   backend:
     container_name: elia-api
-    image: eliaregistry.azurecr.io/elia-api:latest  # Pull backend image from ACR
-    restart: always
+    image: nickchaidocker/elia-api:latest
     ports:
       - "8000:8000"
     environment:
