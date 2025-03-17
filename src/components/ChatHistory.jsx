@@ -49,25 +49,19 @@ const ChatHistory = ({ messages, loading }) => {
                     <ReactMarkdown
                         components={{
                             p: ({ children }) => (
-                                <Typography sx={{ m: 0, mb: 0, lineHeight: 1.4 }}>
-                                    {children}
-                                </Typography>
-                            ),
-                            li: ({ children }) => (
-                                <Typography
-                                    component="li"
-                                    sx={{
-                                        m: 0,
-                                        pl: 2, // Indent for list item
-                                        lineHeight: 1.4,
-                                        listStyleType: "disc", // You can customize this as needed
-                                    }}
-                                >
+                                <Typography sx={{ m: 0, mb: 0.5, lineHeight: 1.5 }}>
                                     {children}
                                 </Typography>
                             ),
                             ul: ({ children }) => (
-                                <ul style={{ margin: 0, paddingLeft: "1.2em" }}>{children}</ul>
+                                <ul style={{ margin: 0, paddingLeft: "1.2em", paddingTop: 0, paddingBottom: 0 }}>
+                                    {children}
+                                </ul>
+                            ),
+                            li: ({ children }) => (
+                                <li style={{ marginBottom: "0.3em", lineHeight: "1.5" }}>
+                                    {children}
+                                </li>
                             ),
                         }}
                     >
