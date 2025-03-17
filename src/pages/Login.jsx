@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import _ from "lodash";
 import { getRandomImage } from "../utils/image";
 import { LoadingOverlay } from "../features/Loader";
+import TitleBlock from "../components/TitleBlock";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -45,6 +46,7 @@ function Login() {
 
   return (
     <Box sx={{ display: "flex", height: "100vh", flexDirection: "row" }}>
+
       {/* the login form */}
       <Box
         sx={{
@@ -59,7 +61,21 @@ function Login() {
           backgroundImage: "none", // Override the background image
         }}
       >
-        <Box sx={{ width: "100%", maxWidth: 400 }}>
+        {/* Title Block */}
+        <Box
+            sx={{
+                flex: 1,
+                alignItems: "left",
+                width: "100%", 
+                maxWidth: 400,
+                mt: 9,
+                mb: 2
+            }}
+        >
+            <TitleBlock />
+        </Box>
+        {/* login form */}
+        <Box sx={{ flex: 3, width: "100%", maxWidth: 400 }}>
           <Typography
             component="h1"
             variant="h4"

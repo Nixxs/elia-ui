@@ -51,7 +51,7 @@ function Main() {
                 </Box>
 
                 {/* Right Side - Google Map */}
-                <Box sx={{ flex: 3, borderRight: "1px solid #ddd", overflow: "hidden" }}>
+                <Box sx={{ flex: 5, borderRight: "1px solid #ddd", overflow: "hidden" }}>
                     <MapView onMapLoad={setMap} /> {/* ✅ Capture map instance on load */}
                 </Box>
             </Box>
