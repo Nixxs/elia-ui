@@ -11,6 +11,7 @@ import _ from "lodash";
 import { getRandomImage } from "../utils/image";
 import axios from "axios";
 import { LoadingOverlay } from "../features/Loader";
+import TitleBlock from "../components/TitleBlock";
 
 function Signup() {
   const [email, setEmail] = useState("");
@@ -112,7 +113,20 @@ function Signup() {
           backgroundImage: "none", // Override the background image
         }}
       >
-        <Box sx={{ width: "100%", maxWidth: 400 }}>
+        {/* Title Block */}
+        <Box
+            sx={{
+                flex: 1,
+                alignItems: "left",
+                width: "100%", 
+                maxWidth: 400,
+                mt: 9,
+                mb: 2
+            }}
+        >
+            <TitleBlock />
+        </Box>
+        <Box sx={{ flex: 3, width: "100%", maxWidth: 400 }}>
           <Typography
             component="h1"
             variant="h4"
