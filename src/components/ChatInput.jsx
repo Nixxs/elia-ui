@@ -1,6 +1,4 @@
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { Box, Button, TextField } from "@mui/material";
 
 const ChatInput = ({ input, setInput, handleSendMessage }) => {
     return (
@@ -10,40 +8,46 @@ const ChatInput = ({ input, setInput, handleSendMessage }) => {
                 display: "flex",
                 gap: 1,
                 borderTop: "1px solid #ddd",
-                height: "100%", // ✅ Fill available vertical space
-                alignItems: "center", // ✅ Center items vertically
-				maxHeight: 60,
+                alignItems: "flex-end", // Align button to bottom of growing input
             }}
         >
             <TextField
                 fullWidth
-                size="medium"
+                multiline
+                minRows={1}
+                maxRows={6} // Grows up to 6 lines
                 placeholder="Type your message..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {
-                    if (e.key === "Enter") handleSendMessage();
+                    if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault(); // Prevent newline if not Shift+Enter
+                        handleSendMessage();
+                    }
                 }}
                 sx={{
-                    height: "100%", // Full height
                     "& .MuiOutlinedInput-root": {
-                        height: "100%", // Ensure input fills height
-                        "& fieldset": {
-                            border: "none", // Remove border
-                        },
-                        alignItems: "center", // Center text vertically
-                        paddingRight: 0,
+                        padding: "8px 12px",
+                        borderRadius: "8px",
+                        backgroundColor: "#f5f5f5",
+                        alignItems: "flex-start", // Fix vertical alignment
                     },
-                    "& input": {
-                        fontSize: "1rem", // ✅ Bigger font size (adjust as needed, e.g., '1.1rem' or '16px')
-                        padding: 0, // Optional: adjust padding if needed
+                    "& textarea": {
+                        padding: 0,
+                        fontSize: "1rem",
+                        lineHeight: 1.5,
                     },
                 }}
             />
             <Button
                 variant="contained"
                 onClick={handleSendMessage}
-                sx={{ height: "100%" }} // ✅ Match button height to input
+                sx={{
+                    whiteSpace: "nowrap",
+                    height: 40,
+                    borderRadius: "8px",
+                    alignSelf: "flex-end", // Align with bottom of input
+                }}
             >
                 Send
             </Button>
